@@ -1,0 +1,28 @@
+﻿@model IList<String>
+
+@{
+    ViewData["Title"] = "Display Names";
+}
+
+<h1>Display Names</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Names:
+            </th>
+           
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
