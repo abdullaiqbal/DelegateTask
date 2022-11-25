@@ -10,10 +10,13 @@ namespace TaskDelegates.Controllers
     {
         private readonly ApplicationDbContext _dbcontext;
 
+        //Custome Delegate Declaration
         private delegate List<customer> CNameLahore(IList<customer> _customers);
         private delegate List<customer> CName(IList<customer> _customers);
         private delegate List<customer> CustomerAccordingToAge(IList<customer> _customers);
         private delegate String TotalOfGrandTotal(IList<customer> _customers);
+        //Custome Delegate Declaration End
+
         public CustomerController(ApplicationDbContext dbcontext)
         {
             _dbcontext= dbcontext;
@@ -24,25 +27,24 @@ namespace TaskDelegates.Controllers
             var customers = _dbcontext.Customers.ToList();
             return View(customers);
         }
+
+        //SingleCast Delegate / Custom Delegate
         [HttpGet]
         public IActionResult DisplayNameLahore()
         {
-            //var customers = _dbcontext.Customers.ToList();
             CNameLahore cNamehandler = delegate (IList<customer> _customer)
             {
                var customer = _customer.Where(c => c.City.Equals("Lahore")||c.City.Equals("lahore")).ToList();
                return customer;
             };
-
            var customers = cNamehandler(_dbcontext.Customers.ToList());
-            //Print print = delegate (int val) {
-            //    Console.WriteLine("Inside Anonymous method. Value: {0}", val);
-            //};
             return View(customers);  
         }
 
-    
-    [HttpGet]
+       
+
+
+        [HttpGet]
     public IActionResult DisplayName()
     {
         //var customers = _dbcontext.Customers.ToList();
@@ -68,48 +70,101 @@ namespace TaskDelegates.Controllers
         [HttpGet]
         public IActionResult DisplayCustomersAge55To60()
         {
-            //var customers = _dbcontext.Customers.ToList();
             CNameLahore cNamehandler = delegate (IList<customer> _customer)
             {
-                var customer = _customer.Where(c =>Convert.ToInt32(c.Age)>=55&& Convert.ToInt32(c.Age) <= 60).ToList();
+                var customer = _customer.Where(c => Convert.ToInt32(c.Age) >= 55 && Convert.ToInt32(c.Age) <= 60).ToList();
                 return customer;
             };
-
             var customers = cNamehandler(_dbcontext.Customers.ToList());
-            //Print print = delegate (int val) {
-            //    Console.WriteLine("Inside Anonymous method. Value: {0}", val);
-            //};
             return View(customers);
         }
 
+        //public void TotalOFGrandTotal()
+        //{
+        //    TotalOfGrandTotal chandler = delegate (IList<customer> _customer)
+        //    {
+        //        int Total=0;
+        //        foreach(var c in _customer)
+        //        {
+        //            Total += Convert.ToInt32(c.GrandTotal);
+        //        }
 
+                
+        //        return Total.ToString();
+
+        //    };
+
+        //    var total = chandler(_dbcontext.Customers.ToList());
+        //    ViewBag.Total=total;
+        //    //return View();
+        //}
+        //SingleCast Delegate / Custom Delegate End
+
+
+
+
+        //New Section
+        //Generic Delegate: Func Section
         //[HttpGet]
-       
+        //public IActionResult GetRecordsLahoreFunc()
+        //{
+        //    Func<IList<customer>, IList<customer>> chandler = delegate (IList<customer> _customer)
+        //    {
+        //        return _customer.Where(c => c.City.Equals("Lahore") || c.City.Equals("lahore")).ToList();
+
+        //    };
+        //    return View(chandler(_dbcontext.Customers.ToList()));
+        //}
+
+        //Generic Delegate: Func Section With Lambda Expresion
+        [HttpGet]
+        public IActionResult GetRecordsLahoreFunc()
+        {
+            Func<IList<customer>, IList<customer>> chandler = (IList<customer> _customer)=>
+                _customer.Where(c => c.City.Equals("Lahore") || c.City.Equals("lahore")).ToList();
+            return View(chandler(_dbcontext.Customers.ToList()));
+        }
+
+        //Generic Delegate: Func Section End
+
+        //Generic Delegate: Func Section With Anonymas Method
+
+
+        //public void TotalOFGrandTotal()
+        //{
+        //    Func<IList<customer>,String> chandler = delegate (IList<customer> _customer)
+        //    {
+        //        int Total = 0;
+        //        foreach (var c in _customer)
+        //        {
+        //            Total += Convert.ToInt32(c.GrandTotal);
+        //        }
+
+        //        return Total.ToString();
+
+        //    };
+        //    var total = chandler(_dbcontext.Customers.ToList());
+        //    ViewBag.Total = total;
+        //}
+
+        //Generic Delegate: Func Section With Anonymos Method End
+
+        ////Generic Delegate: Action Section With Anonymus Method
         public void TotalOFGrandTotal()
         {
-            //var customers = _dbcontext.Customers.ToList();
-            TotalOfGrandTotal chandler = delegate (IList<customer> _customer)
+            Action<IList<customer>> chandler = delegate (IList<customer> _customer)
             {
-                //var customer = _customer.ToList();
-                int Total=0;
-                foreach(var c in _customer)
+                int Total = 0;
+                foreach (var c in _customer)
                 {
                     Total += Convert.ToInt32(c.GrandTotal);
                 }
-
-                
-                return Total.ToString();
-
+                ViewBag.Total = Total.ToString();
             };
-
-            var total = chandler(_dbcontext.Customers.ToList());
-            //Print print = delegate (int val) {
-            //    Console.WriteLine("Inside Anonymous method. Value: {0}", val);
-            //};
-            //ViewData["Total"] = total;
-            ViewBag.Total=total;
-            //return View();
+            chandler(_dbcontext.Customers.ToList());
         }
+
+        //Generic Delegate: Action Section With Lambda Expresion
 
         [HttpGet]
         public IActionResult Create()

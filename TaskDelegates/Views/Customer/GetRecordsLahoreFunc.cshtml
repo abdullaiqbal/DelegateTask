@@ -1,25 +1,13 @@
 ﻿@model IEnumerable<TaskDelegates.Models.customer>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "GetRecordsLahoreFunc";
 }
 
-<h1>Index</h1>
+<h1>GetRecordsLahoreFunc</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
-</p>
-<p>
-    <a asp-controller="Customer" asp-action="GetRecordsLahoreFunc">Lahore Customers Records</a>
-</p>
-<p>
-    <a asp-controller="Customer" asp-action="DisplayName">Lahore Customers Names</a>
-</p>
-<p>
-    <a asp-controller="Customer" asp-action="DisplayCustomersAge55To60">Customers Age 55 To 60</a>
-</p>
-<p>
-Total: @ViewBag.Total
 </p>
 <table class="table">
     <thead>
